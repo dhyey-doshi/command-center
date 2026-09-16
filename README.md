@@ -19,25 +19,25 @@ Every piece of data is stored strictly on your local disk with automatic rotatin
 
 ## Features
 
-- ⚡ **Global Command Palette (`Ctrl+Space`)**  
+-  **Global Command Palette (`Ctrl+Space`)**  
   Quickly search across bookmarks, tasks, notes, and system commands from anywhere in your operating system.
 
-- 🗂️ **Universal Resource Library**  
+-  **Universal Resource Library**  
   Index and organize websites, local directories, documents, PDF files, Notion pages, and Obsidian vaults. Launch files or folders directly in your native OS file manager with drag-and-drop support.
 
-- ✅ **Task Management & Subtasks**  
+-  **Task Management & Subtasks**  
   Create and track actionable tasks with priorities (`Low`, `Medium`, `High`), due dates, and nested subtasks. Fast inline entry, status filters, and instant undo actions.
 
-- 📝 **Markdown Notes & Scratchpad**  
+-  **Markdown Notes & Scratchpad**  
   Instant note-taking with tag indexing, full-text search, and automatic background saving. Includes a fast global quick-note capture modal (`Ctrl+Shift+Z`).
 
-- ⏰ **Timeline Reminders & Native Notifications**  
+-  **Timeline Reminders & Native Notifications**  
   Schedule time-sensitive alerts with native desktop notifications. Configure configurable quiet hours and startup reminders.
 
-- 💻 **Integrated Hacker Console (`Shift+\``)**  
+-  **Integrated Hacker Console (`Shift+\``)**  
   A drop-down terminal drawer offering CLI-style commands (`help`, `tasks`, `notes`, `open`, `status`, `clear`, etc.) for power users.
 
-- 🔒 **Local-First & Privacy-Centric**  
+-  **Local-First & Privacy-Centric**  
   Your data stays on your device. Database entries are stored in your operating system's standard user data directory with an automated 5-slot rotating backup engine.
 
 ---
