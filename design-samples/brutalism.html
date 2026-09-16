@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Neo-Brutalist Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Chivo:wght@400;800;900&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#1b1b1b",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#303030",
+                        "tertiary-fixed": "#dae2ff",
+                        "inverse-primary": "#e9c400",
+                        "secondary-container": "#fd8b00",
+                        "tertiary-container": "#cdd9ff",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eeeeee",
+                        "outline-variant": "#d0c6ab",
+                        "tertiary": "#2559bd",
+                        "on-surface-variant": "#4d4732",
+                        "on-primary-fixed": "#221b00",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-secondary": "#ffffff",
+                        "on-primary-container": "#705e00",
+                        "inverse-on-surface": "#f1f1f1",
+                        "on-secondary-fixed": "#2f1500",
+                        "surface-dim": "#dadada",
+                        "on-primary": "#ffffff",
+                        "on-background": "#1b1b1b",
+                        "outline": "#7e775f",
+                        "on-tertiary-fixed-variant": "#00419e",
+                        "on-secondary-container": "#603100",
+                        "primary-fixed-dim": "#e9c400",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#e2e2e2",
+                        "surface": "#f9f9f9",
+                        "background": "#f9f9f9",
+                        "tertiary-fixed-dim": "#b1c5ff",
+                        "primary-container": "#ffd700",
+                        "on-tertiary-fixed": "#001946",
+                        "primary-fixed": "#ffe16d",
+                        "surface-tint": "#705d00",
+                        "on-tertiary-container": "#255abe",
+                        "surface-bright": "#f9f9f9",
+                        "primary": "#705d00",
+                        "surface-container-high": "#e8e8e8",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-container-low": "#f3f3f3",
+                        "secondary": "#904d00",
+                        "on-primary-fixed-variant": "#544600"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "4px",
+                        "border-width": "3px",
+                        "gutter": "16px",
+                        "margin": "24px",
+                        "container-max": "1440px",
+                        "shadow-offset": "5px"
+                    },
+                    "fontFamily": {
+                        "code-sm": ["Space Mono"],
+                        "body-md": ["Chivo"],
+                        "headline-lg": ["Chivo"],
+                        "headline-lg-mobile": ["Chivo"],
+                        "label-mono": ["Space Mono"],
+                        "display-xl": ["Chivo"]
+                    },
+                    "fontSize": {
+                        "code-sm": ["14px", { "lineHeight": "1.4", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "800" }],
+                        "label-mono": ["12px", { "lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "display-xl": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "900" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #d0c6ab; /* Using outline-variant as Sand fallback based on prompt */
+            color: #1b1b1b;
+        }
+        .brutal-border { border: 3px solid #1b1b1b; }
+        .brutal-shadow { box-shadow: 5px 5px 0px 0px #1b1b1b; }
+        .brutal-hover:active { transform: translate(5px, 5px); box-shadow: none; }
+        
+        /* Grid system overide for strictly blocky layout */
+        .brutal-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(12, 1fr);
+        }
+        @media (max-width: 768px) {
+            .brutal-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex flex-col h-screen w-64 border-r-[3px] border-on-surface bg-surface dark:bg-on-surface sticky top-0 shrink-0">
+<div class="p-margin border-b-[3px] border-on-surface">
+<h1 class="font-headline-lg text-headline-lg font-black text-on-surface">COMMAND_CENTER_V1</h1>
+</div>
+<div class="p-margin border-b-[3px] border-on-surface flex items-center gap-4">
+<img class="w-12 h-12 brutal-border object-cover bg-secondary-container" data-alt="A stylized, low-poly, brutalist avatar portrait of a system administrator in an orange jumpsuit against a bright yellow background. The lighting is harsh and direct, casting stark black shadows. The mood is utilitarian and authoritative." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCE2CM6LOnaoYnK18rCdqALClYZRpORyRtLj8l5nC4_P9PQ8napOIT81wUtgFjpJHksgq-KosfLdCPNe54aZ35r6npUiuCa_Q30vxuszNNhKfpDxthgxlcJbgwym8tdQe9Lp16544mq-oU-ZaB8o_IV6IL_6IwmM5M4OLNahJ2iuyAuiUGz9zTwzLdKIWcjAlSC9mi6JrFpf2gkVo64BlDDZ2GyF8wRod2a14tSttTsGi_tRNElplaSdyplpFlAYCxCEz3TRcTvoOs"/>
+<div>
+<p class="font-label-mono text-label-mono text-on-surface">ADM_ROOT</p>
+<p class="font-code-sm text-code-sm text-on-surface-variant">lvl_04_access</p>
+</div>
+</div>
+<div class="flex flex-col h-full gap-4 p-margin overflow-y-auto">
+<a class="bg-primary text-on-primary border-[3px] border-on-surface shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] m-2 flex items-center gap-2 p-2 brutal-hover" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span class="font-code-sm text-code-sm uppercase font-bold">TERMINAL</span>
+</a>
+<a class="text-on-surface-variant m-2 border-[3px] border-transparent hover:border-on-surface hover:bg-surface-container-highest flex items-center gap-2 p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">dns</span>
+<span class="font-code-sm text-code-sm uppercase">NODES</span>
+</a>
+<a class="text-on-surface-variant m-2 border-[3px] border-transparent hover:border-on-surface hover:bg-surface-container-highest flex items-center gap-2 p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">router</span>
+<span class="font-code-sm text-code-sm uppercase">TRAFFIC</span>
+</a>
+<a class="text-on-surface-variant m-2 border-[3px] border-transparent hover:border-on-surface hover:bg-surface-container-highest flex items-center gap-2 p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="font-code-sm text-code-sm uppercase">LOGS</span>
+</a>
+<a class="text-on-surface-variant m-2 border-[3px] border-transparent hover:border-on-surface hover:bg-surface-container-highest flex items-center gap-2 p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">timer</span>
+<span class="font-code-sm text-code-sm uppercase">UPTIME</span>
+</a>
+<a class="text-on-surface-variant m-2 border-[3px] border-transparent hover:border-on-surface hover:bg-surface-container-highest flex items-center gap-2 p-2 transition-colors" href="#">
+<span class="material-symbols-outlined">admin_panel_settings</span>
+<span class="font-code-sm text-code-sm uppercase">ADMIN</span>
+</a>
+</div>
+<div class="p-margin border-t-[3px] border-on-surface mt-auto">
+<button class="w-full bg-secondary-container text-on-surface brutal-border brutal-shadow p-3 font-label-mono text-label-mono font-bold brutal-hover uppercase hover:bg-primary-container transition-colors">
+                INIT_SEQUENCE
+            </button>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0">
+<!-- TopNavBar (Mobile fallback + Top actions) -->
+<header class="flex justify-between items-center px-gutter py-4 w-full bg-surface border-b-[3px] border-on-surface shadow-[5px_5px_0px_0px_rgba(0,0,0,1)] z-10 md:sticky top-0">
+<div class="md:hidden flex items-center gap-2">
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile font-black text-on-surface">CMD_CTR</h1>
+</div>
+<!-- Navigation Links for TopBar (usually hidden on mobile if SideNav exists, but requested by JSON) -->
+<nav class="hidden lg:flex gap-4 items-center">
+<a class="text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all px-4 py-1 border-[3px] border-transparent font-code-sm text-code-sm uppercase font-bold" href="#">SYSTEM</a>
+<a class="text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all px-4 py-1 border-[3px] border-transparent font-code-sm text-code-sm uppercase font-bold" href="#">NETWORK</a>
+<a class="text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all px-4 py-1 border-[3px] border-transparent font-code-sm text-code-sm uppercase font-bold" href="#">STORAGE</a>
+<a class="text-on-surface hover:bg-secondary-container hover:text-on-secondary-container transition-all px-4 py-1 border-[3px] border-transparent font-code-sm text-code-sm uppercase font-bold" href="#">SECURITY</a>
+</nav>
+<div class="flex gap-4 items-center">
+<!-- Search bar on right as per JSON -->
+<div class="hidden md:flex items-center brutal-border bg-outline-variant focus-within:bg-primary-container focus-within:brutal-shadow transition-all px-2 py-1">
+<span class="material-symbols-outlined text-on-surface">search</span>
+<input class="bg-transparent border-none outline-none font-code-sm text-code-sm text-on-surface focus:ring-0 placeholder-on-surface-variant w-48" placeholder="SEARCH_QUERY..." type="text"/>
+</div>
+<button class="p-2 brutal-border bg-surface hover:bg-secondary-container brutal-hover">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 brutal-border bg-error text-on-error hover:bg-on-error-container brutal-hover">
+<span class="material-symbols-outlined">power_settings_new</span>
+</button>
+</div>
+</header>
+<!-- Dashboard Canvas -->
+<div class="p-margin md:p-[32px] flex-1 overflow-y-auto">
+<div class="mb-8">
+<h2 class="font-display-xl text-display-xl font-black text-on-surface uppercase mb-2">System Overview</h2>
+<p class="font-code-sm text-code-sm text-on-surface-variant">Live metrics streaming. Global grid active.</p>
+</div>
+<!-- Main Grid Layout -->
+<div class="brutal-grid">
+<!-- Metrics Row (Top) -->
+<div class="col-span-12 md:col-span-4 brutal-border brutal-shadow bg-primary-container p-margin flex flex-col justify-between">
+<div class="flex justify-between items-start border-b-[3px] border-on-surface pb-2 mb-4">
+<span class="font-label-mono text-label-mono uppercase font-bold">CPU_USAGE</span>
+<span class="material-symbols-outlined">memory</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="font-display-xl text-display-xl font-black">84</span>
+<span class="font-code-sm text-code-sm mb-2">%</span>
+</div>
+<div class="w-full h-4 brutal-border mt-4 bg-outline-variant">
+<div class="h-full bg-error" style="width: 84%;"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 brutal-border brutal-shadow bg-secondary-container p-margin flex flex-col justify-between">
+<div class="flex justify-between items-start border-b-[3px] border-on-surface pb-2 mb-4">
+<span class="font-label-mono text-label-mono uppercase font-bold">RAM_ALLOC</span>
+<span class="material-symbols-outlined">dataset</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="font-display-xl text-display-xl font-black text-on-surface">62</span>
+<span class="font-code-sm text-code-sm text-on-surface mb-2">%</span>
+</div>
+<div class="w-full h-4 brutal-border mt-4 bg-outline-variant">
+<div class="h-full bg-on-surface" style="width: 62%;"></div>
+</div>
+</div>
+<div class="col-span-12 md:col-span-4 brutal-border brutal-shadow bg-primary-container p-margin flex flex-col justify-between">
+<div class="flex justify-between items-start border-b-[3px] border-on-surface pb-2 mb-4">
+<span class="font-label-mono text-label-mono uppercase font-bold">NET_TRAFFIC</span>
+<span class="material-symbols-outlined">lan</span>
+</div>
+<div class="flex items-end gap-2">
+<span class="font-display-xl text-display-xl font-black">1.2</span>
+<span class="font-code-sm text-code-sm mb-2">TB/s</span>
+</div>
+<div class="flex gap-2 mt-4">
+<span class="bg-surface brutal-border px-2 py-1 font-label-mono text-label-mono text-xs">↑ 800GB</span>
+<span class="bg-surface brutal-border px-2 py-1 font-label-mono text-label-mono text-xs">↓ 400GB</span>
+</div>
+</div>
+<!-- Main Display Area (Middle Row) -->
+<div class="col-span-12 lg:col-span-8 brutal-border brutal-shadow bg-surface flex flex-col">
+<div class="bg-tertiary text-on-tertiary border-b-[3px] border-on-surface p-4 flex justify-between items-center">
+<span class="font-code-sm text-code-sm font-bold uppercase">GLOBAL_NODE_TOPOLOGY</span>
+<span class="material-symbols-outlined">public</span>
+</div>
+<div class="relative p-margin flex-1 min-h-[400px] flex items-center justify-center bg-outline-variant overflow-hidden" style="background-image: radial-gradient(#1b1b1b 2px, transparent 2px); background-size: 24px 24px;">
+<!-- Placeholder for map visualization -->
+<div class="absolute inset-0 flex items-center justify-center opacity-80">
+<img class="object-cover w-full h-full mix-blend-multiply" data-alt="A stylized, flat, brutalist world map composed of harsh geometric shapes and thick primary blue lines connecting various blocky nodes. The map sits on a dotted grid background. The colors are limited to bright blue, harsh white, and solid black." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsezNvJ7OgcoMyY5gBjebccocieZbP6MG8JZoZIw5le9HUuFKONiCb9YdLttZp_FGZjH14hurUg8w4ZH9Q_HqPote-x5UmIyFm6Xo7Tdpq6YeFhVactzmodZ8t4lCqmkHJr0oqy5VAulNn8kQNQ0geKfYf0WWcwynrN3w3E4UZNY3p-_8DTPECoSZQDUucS0kqqugQY0gkM39GR4Lzr819ijAK5ajApea6-ZbUZCuJWKlR3MsOzKl1xAKmv6D0YEMJq9FRqJPRxV4"/>
+</div>
+<!-- Overlay Nodes -->
+<div class="absolute top-1/4 left-1/4 w-8 h-8 bg-primary brutal-border brutal-shadow flex items-center justify-center z-10 animate-pulse">
+<span class="font-label-mono text-[10px] font-bold">N1</span>
+</div>
+<div class="absolute bottom-1/3 right-1/3 w-8 h-8 bg-error text-on-error brutal-border brutal-shadow flex items-center justify-center z-10">
+<span class="font-label-mono text-[10px] font-bold">N2</span>
+</div>
+<div class="absolute top-1/2 right-1/4 w-8 h-8 bg-secondary-container brutal-border brutal-shadow flex items-center justify-center z-10">
+<span class="font-label-mono text-[10px] font-bold">N3</span>
+</div>
+</div>
+</div>
+<!-- Sidebar Alerts & Terminal (Right Column) -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-4">
+<!-- Threat Alerts -->
+<div class="brutal-border brutal-shadow bg-error text-on-error flex flex-col">
+<div class="border-b-[3px] border-on-surface p-2 bg-on-surface text-error flex justify-between items-center">
+<span class="font-label-mono text-label-mono font-bold uppercase tracking-widest">! ACTIVE_THREATS</span>
+<span class="material-symbols-outlined animate-bounce">warning</span>
+</div>
+<div class="p-4 flex flex-col gap-2">
+<div class="bg-surface text-on-surface brutal-border p-2 font-code-sm text-code-sm flex justify-between items-center">
+<span>UNAUTH_ACCESS_ATTEMPT</span>
+<span class="bg-error text-on-error px-1 font-label-mono text-[10px]">CRIT</span>
+</div>
+<div class="bg-surface text-on-surface brutal-border p-2 font-code-sm text-code-sm flex justify-between items-center opacity-80">
+<span>PORT_SCAN_DETECTED</span>
+<span class="bg-secondary-container text-on-surface px-1 font-label-mono text-[10px]">WARN</span>
+</div>
+</div>
+</div>
+<!-- Terminal Window -->
+<div class="brutal-border brutal-shadow bg-on-surface flex-1 flex flex-col min-h-[250px]">
+<div class="border-b-[3px] border-surface bg-surface text-on-surface p-2 flex justify-between items-center">
+<span class="font-code-sm text-code-sm font-bold uppercase">CMD_LINE_INTERFACE</span>
+<div class="flex gap-1">
+<div class="w-3 h-3 brutal-border bg-error"></div>
+<div class="w-3 h-3 brutal-border bg-primary-container"></div>
+<div class="w-3 h-3 brutal-border bg-tertiary"></div>
+</div>
+</div>
+<div class="p-4 flex-1 overflow-y-auto font-code-sm text-code-sm text-[#33ff00] bg-on-surface leading-tight">
+<p class="opacity-50">&gt; root@cmd_center:~# init</p>
+<p class="opacity-50">Initializing core systems...</p>
+<p class="opacity-50">[OK] Kernel loaded.</p>
+<p class="opacity-50">[OK] Network interfaces bound.</p>
+<p class="text-error">[WARN] Primary datastore sync delayed.</p>
+<p>&gt; root@cmd_center:~# tail -f /var/log/syslog</p>
+<p class="opacity-80">May 14 10:23:41 node_01 sshd[1234]: Accepted publickey for admin...</p>
+<p class="opacity-80">May 14 10:24:02 node_02 systemd[1]: Started Backup Service.</p>
+<div class="mt-4 flex items-center">
+<span class="mr-2">&gt;_</span>
+<input class="bg-transparent border-none outline-none text-[#33ff00] font-code-sm text-code-sm w-full focus:ring-0 p-0" placeholder="Type command..." type="text"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto bg-on-surface text-surface border-t-[3px] border-on-surface flex justify-between items-center px-margin py-2 w-full z-10">
+<div class="font-label-mono text-label-mono font-bold">
+                CORE_OS_v4.2.0_STABLE
+            </div>
+<div class="flex gap-4">
+<a class="font-label-mono text-label-mono text-surface-variant opacity-80 hover:text-primary transition-colors uppercase" href="#">SYS_LOG</a>
+<a class="font-label-mono text-label-mono text-surface-variant opacity-80 hover:text-primary transition-colors uppercase" href="#">KERN_ERR</a>
+<a class="font-label-mono text-label-mono text-surface-variant opacity-80 hover:text-primary transition-colors uppercase" href="#">DB_SYNC</a>
+</div>
+</footer>
+</main>
+</body></html>

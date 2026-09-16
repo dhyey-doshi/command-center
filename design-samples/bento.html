@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ORCHESTRATOR_CMD - Command Center Dashboard</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config injected from Brand Anchors -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-low": "#1b1c1c",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-primary": "#313030",
+                        "on-secondary-container": "#00285c",
+                        "surface-tint": "#c8c6c5",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "on-background": "#e4e2e1",
+                        "surface-variant": "#353535",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#003824",
+                        "tertiary-container": "#00160c",
+                        "tertiary": "#4edea3",
+                        "inverse-surface": "#e4e2e1",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-error": "#690005",
+                        "surface-dim": "#131313",
+                        "on-secondary-fixed": "#001a41",
+                        "outline": "#8e9192",
+                        "on-tertiary-container": "#008f62",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed-variant": "#004493",
+                        "on-primary-fixed-variant": "#474646",
+                        "background": "#131313",
+                        "surface-container": "#1f2020",
+                        "inverse-on-surface": "#303030",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-lowest": "#0e0e0e",
+                        "error": "#ffb4ab",
+                        "surface-bright": "#393939",
+                        "primary-fixed": "#e5e2e1",
+                        "primary": "#c8c6c5",
+                        "secondary": "#adc6ff",
+                        "on-primary-container": "#7e7d7d",
+                        "on-surface": "#e4e2e1",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#002113",
+                        "secondary-fixed-dim": "#adc6ff",
+                        "on-secondary": "#002e69",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "outline-variant": "#444748",
+                        "inverse-primary": "#5f5e5e",
+                        "surface": "#131313",
+                        "secondary-container": "#4b8eff",
+                        "on-error-container": "#ffdad6",
+                        "on-surface-variant": "#c4c7c7",
+                        "primary-container": "#121212"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "container-padding": "24px",
+                        "grid-gutter": "16px",
+                        "component-gap": "12px"
+                    },
+                    "fontFamily": {
+                        "headline-md-mobile": ["Inter", "sans-serif"],
+                        "headline-sm": ["Inter", "sans-serif"],
+                        "body-lg": ["Inter", "sans-serif"],
+                        "display-lg": ["Inter", "sans-serif"],
+                        "headline-md": ["Inter", "sans-serif"],
+                        "label-mono": ["JetBrains Mono", "monospace"],
+                        "body-md": ["Inter", "sans-serif"]
+                    },
+                    "fontSize": {
+                        "headline-md-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-mono": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts for Typography -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        /* Shared Style Rules */
+        body {
+            background-color: #0A0A0A; /* Deep Charcoal background as per prompt & brand */
+            color: #e4e2e1;
+        }
+        
+        .bento-card {
+            background-color: #121212;
+            border: 1px solid #2A2A2A;
+            background-image: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 10%);
+        }
+        
+        /* Subtle scrollbar for terminal */
+        .terminal-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .terminal-scroll::-webkit-scrollbar-track {
+            background: #131313;
+        }
+        .terminal-scroll::-webkit-scrollbar-thumb {
+            background: #353535;
+            border-radius: 4px;
+        }
+        
+        /* Glow for active state/charts */
+        .glow-accent {
+            filter: drop-shadow(0 0 10px rgba(78,222,163,0.3)); /* Emerald */
+        }
+        .glow-secondary {
+            filter: drop-shadow(0 0 10px rgba(173,198,255,0.3)); /* Soft Blue */
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md text-on-surface h-screen flex flex-col overflow-hidden">
+<!-- TopNavBar -->
+<nav class="flex justify-between items-center h-16 px-container-padding w-full z-50 bg-background border-b border-outline-variant flat no shadows shrink-0">
+<!-- Brand Logo -->
+<div class="font-display-lg text-display-lg font-black tracking-tighter text-primary dark:text-primary flex items-center">
+<span class="text-[24px]">ORCHESTRATOR_CMD</span>
+</div>
+<!-- Center Nav / Search Area (search_bar: on_left logic applied to nav center) -->
+<div class="flex-1 px-8 max-w-xl hidden md:flex items-center">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full bg-[#121212] border border-[#2A2A2A] rounded-md py-1.5 pl-10 pr-4 text-body-md text-on-surface focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary/50 transition-all placeholder:text-on-surface-variant font-label-mono" placeholder="Search resources..." type="text"/>
+</div>
+</div>
+<!-- Trailing Icon Actions -->
+<div class="flex items-center space-x-4">
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-200 rounded-full active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-200 rounded-full active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-surface-variant/50 transition-colors duration-200 rounded-full active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Layout (Side Nav + Canvas) -->
+<div class="flex flex-1 overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col py-grid-gutter z-40 bg-surface-container-lowest dark:bg-surface-container-lowest border-r border-outline-variant flat no shadows mt-16 pb-16">
+<!-- Side Nav Header -->
+<div class="px-container-padding mb-8">
+<div class="flex items-center space-x-3 mb-4">
+<div class="w-10 h-10 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant">
+<!-- Fallback icon instead of image for technical feel -->
+<span class="material-symbols-outlined text-on-surface-variant">terminal</span>
+</div>
+<div>
+<div class="font-headline-sm text-headline-sm text-primary dark:text-primary">CMD_ROOT</div>
+<div class="font-label-mono text-label-mono text-on-surface-variant">Primary Node: Alpha-7</div>
+</div>
+</div>
+</div>
+<!-- Navigation Links (Active: Overview) -->
+<nav class="flex-1 overflow-y-auto px-2 space-y-1">
+<!-- Active Item: Overview -->
+<a class="flex items-center space-x-3 bg-secondary-container/20 text-tertiary shadow-[0_0_15px_rgba(78,222,163,0.2)] rounded-lg mx-2 my-1 px-4 py-3 font-label-mono text-label-mono active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Overview</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 font-label-mono text-label-mono active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 font-label-mono text-label-mono active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">dns</span>
+<span>Nodes</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 font-label-mono text-label-mono active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">security</span>
+<span>Security</span>
+</a>
+<a class="flex items-center space-x-3 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all duration-200 rounded-lg mx-2 my-1 px-4 py-3 font-label-mono text-label-mono active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined">terminal</span>
+<span>Logs</span>
+</a>
+</nav>
+<!-- CTA -->
+<div class="px-container-padding mt-auto">
+<button class="w-full bg-secondary text-on-secondary font-label-mono text-label-mono py-2.5 rounded-DEFAULT hover:bg-secondary/90 transition-colors">
+                    DEPLOY NEW NODE
+                </button>
+</div>
+</aside>
+<!-- Main Canvas (Bento Grid) -->
+<main class="flex-1 ml-64 p-container-padding overflow-y-auto overflow-x-hidden relative">
+<div class="max-w-7xl mx-auto flex flex-col gap-grid-gutter pb-20"> <!-- pb-20 for footer spacing -->
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-2">
+<div>
+<h1 class="font-headline-md text-headline-md text-on-surface">System Overview</h1>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-1">Status: ALL SYSTEMS NOMINAL</p>
+</div>
+<div class="flex items-center space-x-2">
+<span class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary shadow-[0_0_10px_rgba(78,222,163,0.8)]"></span>
+</span>
+<span class="font-label-mono text-label-mono text-tertiary">LIVE</span>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-grid-gutter auto-rows-[minmax(180px,_auto)]">
+<!-- LARGE PROMINENT CARD: Real-time Utilization -->
+<div class="bento-card rounded-lg md:col-span-8 md:row-span-2 p-5 flex flex-col relative overflow-hidden">
+<div class="flex justify-between items-center mb-6 z-10">
+<h2 class="font-headline-sm text-headline-sm flex items-center space-x-2">
+<span class="material-symbols-outlined text-secondary text-[20px]">memory</span>
+<span>Compute Allocation</span>
+</h2>
+<div class="flex gap-4">
+<div class="flex items-center space-x-1 font-label-mono text-label-mono text-secondary">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<span>CPU (78%)</span>
+</div>
+<div class="flex items-center space-x-1 font-label-mono text-label-mono text-tertiary">
+<div class="w-2 h-2 rounded-full bg-tertiary"></div>
+<span>RAM (62%)</span>
+</div>
+</div>
+</div>
+<!-- Mock Chart Area (Visual abstraction of high-tech chart) -->
+<div class="flex-1 relative w-full flex items-end justify-between px-2 pb-2 gap-1 z-10">
+<!-- Horizontal Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20 border-t border-b border-[#2A2A2A]">
+<div class="border-b border-dashed border-[#2A2A2A] h-1/4"></div>
+<div class="border-b border-dashed border-[#2A2A2A] h-1/4"></div>
+<div class="border-b border-dashed border-[#2A2A2A] h-1/4"></div>
+<div class="h-1/4"></div>
+</div>
+<!-- CPU/RAM Bars (Mock visualization) -->
+<!-- Column 1 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative group">
+<div class="w-full bg-secondary/80 h-[40%] rounded-t-sm glow-secondary transition-all hover:bg-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[30%] rounded-t-sm transition-all hover:bg-tertiary/80"></div>
+</div>
+<!-- Column 2 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[55%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[35%] rounded-t-sm"></div>
+</div>
+<!-- Column 3 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[70%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[40%] rounded-t-sm"></div>
+</div>
+<!-- Column 4 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[85%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[50%] rounded-t-sm"></div>
+</div>
+<!-- Column 5 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[65%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[45%] rounded-t-sm"></div>
+</div>
+<!-- Column 6 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[78%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[62%] rounded-t-sm"></div>
+</div>
+<!-- Column 7 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[82%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[60%] rounded-t-sm"></div>
+</div>
+<!-- Column 8 -->
+<div class="w-[8%] flex flex-col justify-end gap-1 items-center h-full relative">
+<div class="w-full bg-secondary/80 h-[78%] rounded-t-sm glow-secondary"></div>
+<div class="w-full bg-tertiary/60 h-[65%] rounded-t-sm"></div>
+</div>
+</div>
+</div>
+<!-- TALL VERTICAL CARD: Service Control -->
+<div class="bento-card rounded-lg md:col-span-4 md:row-span-2 p-5 flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-sm text-headline-sm flex items-center space-x-2">
+<span class="material-symbols-outlined text-outline text-[20px]">tune</span>
+<span>Service Control</span>
+</h2>
+</div>
+<div class="flex-1 flex flex-col gap-4">
+<!-- Toggle Item 1 -->
+<div class="flex items-center justify-between p-3 rounded-md bg-[#131313] border border-[#2A2A2A] hover:bg-[#1E1E1E] transition-colors">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Core Firewall</span>
+<span class="font-label-mono text-[10px] text-tertiary">Running</span>
+</div>
+<!-- Custom Toggle (Active) -->
+<div class="w-10 h-5 bg-tertiary/20 rounded-full relative cursor-pointer border border-tertiary/30">
+<div class="absolute right-1 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-tertiary rounded-full shadow-[0_0_8px_rgba(78,222,163,0.8)]"></div>
+</div>
+</div>
+<!-- Toggle Item 2 -->
+<div class="flex items-center justify-between p-3 rounded-md bg-[#131313] border border-[#2A2A2A] hover:bg-[#1E1E1E] transition-colors">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">Edge Proxy</span>
+<span class="font-label-mono text-[10px] text-tertiary">Running</span>
+</div>
+<!-- Custom Toggle (Active) -->
+<div class="w-10 h-5 bg-tertiary/20 rounded-full relative cursor-pointer border border-tertiary/30">
+<div class="absolute right-1 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-tertiary rounded-full shadow-[0_0_8px_rgba(78,222,163,0.8)]"></div>
+</div>
+</div>
+<!-- Toggle Item 3 -->
+<div class="flex items-center justify-between p-3 rounded-md bg-[#131313] border border-[#2A2A2A] hover:bg-[#1E1E1E] transition-colors">
+<div class="flex flex-col">
+<span class="font-label-mono text-label-mono text-on-surface">DB Replica Nodes</span>
+<span class="font-label-mono text-[10px] text-on-surface-variant">Standby</span>
+</div>
+<!-- Custom Toggle (Inactive) -->
+<div class="w-10 h-5 bg-[#2A2A2A] rounded-full relative cursor-pointer border border-outline-variant">
+<div class="absolute left-1 top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-outline rounded-full"></div>
+</div>
+</div>
+<!-- System Actions -->
+<div class="mt-auto pt-4 border-t border-[#2A2A2A] grid grid-cols-2 gap-2">
+<button class="py-2 text-center border border-[#2A2A2A] rounded-md font-label-mono text-[11px] hover:bg-surface-variant/30 text-on-surface-variant transition-colors">
+                                    RESTART ALL
+                                </button>
+<button class="py-2 text-center border border-[#2A2A2A] rounded-md font-label-mono text-[11px] bg-error-container/10 text-error hover:bg-error-container/20 transition-colors border-error/30">
+                                    EMERGENCY HALT
+                                </button>
+</div>
+</div>
+</div>
+<!-- SQUARE CARD: Network I/O -->
+<div class="bento-card rounded-lg md:col-span-4 p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm flex items-center space-x-2">
+<span class="material-symbols-outlined text-outline text-[20px]">router</span>
+<span>Network I/O</span>
+</h2>
+<span class="font-label-mono text-label-mono text-secondary">eth0</span>
+</div>
+<div class="flex flex-col gap-4 mt-2">
+<div class="flex justify-between items-end border-b border-[#2A2A2A] pb-2">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]">arrow_downward</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">IN</span>
+</div>
+<div class="font-headline-md text-[28px] leading-none text-tertiary glow-accent">
+                                    4.2 <span class="text-[14px] text-on-surface-variant">GB/s</span>
+</div>
+</div>
+<div class="flex justify-between items-end">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-secondary text-[16px]">arrow_upward</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant">OUT</span>
+</div>
+<div class="font-headline-md text-[28px] leading-none text-secondary glow-secondary">
+                                    1.8 <span class="text-[14px] text-on-surface-variant">GB/s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- SQUARE CARD: Storage -->
+<div class="bento-card rounded-lg md:col-span-4 p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<h2 class="font-headline-sm text-headline-sm flex items-center space-x-2">
+<span class="material-symbols-outlined text-outline text-[20px]">storage</span>
+<span>Storage Volume</span>
+</h2>
+<span class="font-label-mono text-label-mono text-on-surface-variant">/dev/sda1</span>
+</div>
+<div class="flex-1 flex flex-col justify-center gap-3">
+<div class="flex justify-between font-label-mono text-[11px]">
+<span class="text-on-surface">Used: 842 GB</span>
+<span class="text-on-surface-variant">Total: 1 TB</span>
+</div>
+<!-- Progress Bar -->
+<div class="w-full h-3 bg-[#131313] rounded-full border border-[#2A2A2A] overflow-hidden">
+<div class="h-full bg-secondary w-[84%] shadow-[0_0_10px_rgba(173,198,255,0.5)]"></div>
+</div>
+<div class="mt-2 text-right">
+<span class="font-headline-sm text-[20px] text-on-surface">84.2%</span>
+</div>
+</div>
+</div>
+<!-- SQUARE CARD: Active Connections / Metrics -->
+<div class="bento-card rounded-lg md:col-span-4 p-5 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-2">
+<h2 class="font-headline-sm text-headline-sm flex items-center space-x-2">
+<span class="material-symbols-outlined text-outline text-[20px]">public</span>
+<span>Global Conns</span>
+</h2>
+</div>
+<div class="flex-1 flex items-center justify-center relative">
+<!-- Abstract Circular Metric -->
+<div class="w-24 h-24 rounded-full border-4 border-[#2A2A2A] border-t-tertiary border-r-tertiary flex items-center justify-center transform rotate-45 shadow-[inset_0_0_20px_rgba(0,0,0,0.5)]">
+<div class="transform -rotate-45 font-headline-md text-tertiary glow-accent">
+                                    12k
+                                </div>
+</div>
+</div>
+</div>
+<!-- WIDE HORIZONTAL CARD: System Log / Terminal -->
+<div class="bento-card rounded-lg md:col-span-12 h-64 flex flex-col overflow-hidden">
+<!-- Terminal Header -->
+<div class="bg-[#1E1E1E] px-4 py-2 border-b border-[#2A2A2A] flex justify-between items-center">
+<div class="flex space-x-4 items-center">
+<div class="flex space-x-1.5">
+<div class="w-2.5 h-2.5 rounded-full bg-error/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#f59e0b]/50"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary/50"></div>
+</div>
+<span class="font-label-mono text-[11px] text-on-surface-variant">syslog - tail -f /var/log/kernel.log</span>
+</div>
+<div class="flex space-x-2">
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+<button class="text-on-surface-variant hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Terminal Body -->
+<div class="flex-1 bg-[#0A0A0A] p-4 font-label-mono text-[12px] leading-relaxed text-on-surface-variant overflow-y-auto terminal-scroll font-medium tracking-tight">
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:01]</span> <span class="text-on-surface">INFO</span>  : Connection established from 192.168.1.104 port 54323</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:05]</span> <span class="text-tertiary">OK</span>    : Auth sequence completed for user 'admin_r1'</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:15]</span> <span class="text-on-surface">INFO</span>  : Worker node Alpha-7 reported load threshold 78% (CPU)</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:18]</span> <span class="text-[#f59e0b]">WARN</span>  : High memory utilization detected on pod-db-cache-3</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:22]</span> <span class="text-on-surface">INFO</span>  : Garbage collection triggered. Reclaimed 1.2GB.</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:30]</span> <span class="text-error">ERROR</span> : Failed to ping secondary telemetry endpoint (timeout 5000ms)</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:31]</span> <span class="text-on-surface">INFO</span>  : Retrying telemetry connection (1/3)...</div>
+<div class="mb-1"><span class="text-[#4b8eff]">[10:42:33]</span> <span class="text-tertiary">OK</span>    : Telemetry connection re-established. Syncing 45 records.</div>
+<div class="mt-2 flex items-center text-primary animate-pulse">
+<span class="mr-2">root@cmd_orchestrator:~#</span>
+<span class="w-2 h-4 bg-primary inline-block"></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer -->
+<footer class="fixed bottom-0 left-0 w-full h-8 flex items-center justify-between px-container-padding z-50 bg-surface-container-lowest dark:bg-surface-container-lowest border-t border-outline-variant flat no shadows">
+<div class="text-label-mono font-bold text-on-surface">
+            Kernel v6.1.0-23-RT | Latency: 4ms
+        </div>
+<div class="flex items-center space-x-6">
+<a class="font-label-mono text-label-mono text-tertiary hover:text-primary transition-colors cursor-default" href="#">System Status</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors cursor-default" href="#">API Docs</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors cursor-default" href="#">Support</a>
+</div>
+</footer>
+</body></html>

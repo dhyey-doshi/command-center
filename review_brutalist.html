@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neo-Brutalist Command Center Preview</title>
+  <!-- Google Fonts for Neo-Brutalist Vibe -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --color-bg: #09090B;
+      --color-surface: #121214;
+      --color-border: #FFFFFF;
+      --color-accent: #ADFF2F; /* Saturated Neon Lime default */
+      --color-secondary: #FF4A4A; /* Electric Red */
+      --border-width: 3px;
+      --shadow-offset: 4px;
+      --border-radius: 0px;
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-mono: 'Space Mono', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--color-bg);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* CUSTOM WINDOW FRAME */
+    .titlebar {
+      height: 38px;
+      background-color: var(--color-bg);
+      border-bottom: var(--border-width) solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 16px;
+    }
+
+    .titlebar-brand {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .titlebar-dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-accent);
+      border: 1px solid #000000;
+      box-shadow: 2px 2px 0px #000000;
+    }
+
+    .titlebar-controls {
+      display: flex;
+      height: 100%;
+    }
+
+    .titlebar-btn {
+      width: 48px;
+      height: 100%;
+      background: transparent;
+      border: none;
+      border-left: var(--border-width) solid var(--color-border);
+      color: #FFFFFF;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      transition: background-color 100ms;
+    }
+
+    .titlebar-btn:hover {
+      background-color: var(--color-accent);
+      color: #000000;
+    }
+
+    .titlebar-btn.close:hover {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+    }
+
+    /* MAIN APP WORKSPACE */
+    .app-container {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* VERTICAL SIDEBAR RAIL */
+    .sidebar {
+      width: 200px;
+      background-color: var(--color-surface);
+      border-right: var(--border-width) solid var(--color-border);
+      display: flex;
+      flex-direction: column;
+      padding: 24px 16px;
+      gap: 16px;
+    }
+
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+      font-weight: 700;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed var(--color-border);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-logo-icon {
+      font-family: var(--font-mono);
+      background-color: var(--color-accent);
+      color: #000000;
+      padding: 2px 6px;
+      border: 2px solid #000000;
+      box-shadow: 2px 2px 0px #000000;
+      font-weight: 700;
+    }
+
+    .nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background-color: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      color: #FFFFFF;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px #000000;
+      transition: transform 100ms, box-shadow 100ms;
+      text-align: left;
+    }
+
+    .nav-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0px var(--color-accent);
+      background-color: #1E1E24;
+    }
+
+    .nav-btn:active, .nav-btn.active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #000000;
+      background-color: var(--color-accent);
+      color: #000000;
+    }
+
+    .nav-btn-icon {
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    /* MAIN VIEW WINDOW */
+    .view-window {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      position: relative;
+    }
+
+    .header-greeting {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .header-greeting h1 {
+      font-size: 36px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .header-greeting p {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: #A1A1AA;
+    }
+
+    /* DASHBOARD GRID */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 28px;
+    }
+
+    .dashboard-col {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* BRUTALIST CONTAINERS (CARDS) */
+    .brutalist-card {
+      background-color: var(--color-surface);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px #000000;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 100ms, box-shadow 100ms;
+    }
+
+    .brutalist-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0px var(--color-accent);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-accent);
+      border: 1px solid #000000;
+    }
+
+    .card-badge {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      background-color: var(--color-accent);
+      color: #000000;
+      padding: 2px 8px;
+      border: 1.5px solid #000000;
+      box-shadow: 1.5px 1.5px 0px #000000;
+    }
+
+    /* SERVER METRICS CONTENT */
+    .metrics-container {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .graph-mockup {
+      flex: 1;
+      height: 100px;
+      border: 2px solid var(--color-border);
+      background-color: #09090B;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Draw a simple mock grid and line */
+    .graph-mockup::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .graph-line {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      stroke: var(--color-accent);
+      fill: none;
+    }
+
+    .metrics-stats {
+      width: 160px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px dashed #334155;
+      padding-bottom: 2px;
+    }
+
+    .stat-val {
+      font-weight: 700;
+      color: var(--color-accent);
+    }
+
+    /* INTERACTIVE ACTION BUTTONS */
+    .btn-brutal {
+      padding: 10px 20px;
+      background-color: var(--color-accent);
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      color: #000000;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      text-transform: uppercase;
+      box-shadow: 3px 3px 0px #000000;
+      transition: transform 80ms, box-shadow 80ms;
+    }
+
+    .btn-brutal:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0px #000000;
+    }
+
+    .btn-brutal:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0px #000000;
+    }
+
+    .btn-brutal.danger {
+      background-color: var(--color-secondary);
+      color: #FFFFFF;
+    }
+
+    /* TASKS CHECKLIST */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      background-color: #17171C;
+      border: 2px solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: 2px 2px 0px #000000;
+      font-family: var(--font-mono);
+      font-size: 12px;
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--color-border);
+      background-color: #09090B;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+
+    .task-item.done {
+      border-color: #3F3F46;
+      opacity: 0.6;
+    }
+
+    .task-item.done .task-checkbox {
+      background-color: var(--color-accent);
+      color: #000000;
+    }
+
+    .task-item.done .task-checkbox::after {
+      content: 'X';
+      font-size: 10px;
+    }
+
+    .task-item.done span {
+      text-decoration: line-through;
+    }
+
+    /* MOCK COMMAND CONSOLE PANEL */
+    .console-panel {
+      background-color: #09090B;
+      border: var(--border-width) solid var(--color-border);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0px #000000;
+      display: flex;
+      flex-direction: column;
+      font-family: var(--font-mono);
+      overflow: hidden;
+    }
+
+    .console-header {
+      background-color: var(--color-surface);
+      border-bottom: 2px solid var(--color-border);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11px;
+      font-weight: bold;
+      letter-spacing: 0.05em;
+    }
+
+    .console-body {
+      padding: 16px;
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .console-line {
+      display: flex;
+      gap: 8px;
+    }
+
+    .console-line.input {
+      color: var(--color-accent);
+    }
+
+    .console-line.output {
+      color: #D4D4D8;
+      padding-left: 12px;
+    }
+
+    .console-input-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top: 2px solid var(--color-border);
+      padding: 12px 16px;
+      background-color: #121214;
+    }
+
+    .console-prompt {
+      color: var(--color-accent);
+      font-weight: 700;
+    }
+
+    .console-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      outline: none;
+    }
+
+    /* FLOATING CUSTOMIZATION PANEL */
+    .style-customizer {
+      position: fixed;
+      right: 32px;
+      top: 70px;
+      width: 280px;
+      background-color: #18181B;
+      border: 3px solid #FFFFFF;
+      box-shadow: 6px 6px 0px #000000;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 1000;
+    }
+
+    .customizer-title {
+      font-size: 14px;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-bottom: 2px solid #FFFFFF;
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .control-label {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: #A1A1AA;
+      text-transform: uppercase;
+    }
+
+    .color-picker {
+      display: flex;
+      gap: 8px;
+    }
+
+    .color-swatch {
+      width: 28px;
+      height: 28px;
+      border: 2px solid #FFFFFF;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #000000;
+      transition: transform 50ms;
+    }
+
+    .color-swatch:active {
+      transform: translate(2px, 2px);
+      box-shadow: 0px 0px 0px #000000;
+    }
+
+    .select-btn-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .select-btn {
+      padding: 6px 2px;
+      background-color: #27272A;
+      border: 2px solid #FFFFFF;
+      color: #FFFFFF;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px #000000;
+      text-align: center;
+    }
+
+    .select-btn:active, .select-btn.active {
+      background-color: var(--color-accent);
+      color: #000000;
+      box-shadow: 0px 0px 0px #000000;
+      transform: translate(2px, 2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 1. CUSTOM TITLEBAR -->
+  <div class="titlebar">
+    <div class="titlebar-brand">
+      <div class="titlebar-dot"></div>
+      <span>CMD_CTR // NEO_BRUTALIST_PREVIEW</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn">&minus;</button>
+      <button class="titlebar-btn">&#9633;</button>
+      <button class="titlebar-btn close">&times;</button>
+    </div>
+  </div>
+
+  <div class="app-container">
+    
+    <!-- 2. SIDEBAR RAIL -->
+    <div class="sidebar">
+      <div class="sidebar-logo">
+        <span class="sidebar-logo-icon">&gt;_</span>
+        <span>COMMAND</span>
+      </div>
+      <button class="nav-btn active">
+        <span class="nav-btn-icon">&#9632;</span> Home
+      </button>
+      <button class="nav-btn">
+        <span class="nav-btn-icon">&#9654;</span> Library
+      </button>
+      <button class="nav-btn">
+        <span class="nav-btn-icon">&#9670;</span> Tasks
+      </button>
+      <button class="nav-btn">
+        <span class="nav-btn-icon">&#9650;</span> Notes
+      </button>
+      <button class="nav-btn">
+        <span class="nav-btn-icon">&#9679;</span> Settings
+      </button>
+    </div>
+
+    <!-- 3. VIEW WINDOW -->
+    <div class="view-window">
+      
+      <div class="header-greeting">
+        <h1>Welcome Back, Operator</h1>
+        <p>SESSION ID: SECURE_NET_409 // HOST: LOCAL-STATION-1</p>
+      </div>
+
+      <!-- DASHBOARD SPLIT -->
+      <div class="dashboard-grid">
+        
+        <!-- COLUMN 1: WIDGETS -->
+        <div class="dashboard-col">
+          
+          <!-- Server Metrics Card -->
+          <div class="brutalist-card">
+            <div class="card-header">
+              <div class="card-title">Server Metrics</div>
+              <span class="card-badge">LIVE FEED</span>
+            </div>
+            <div class="metrics-container">
+              <div class="graph-mockup">
+                <!-- SVG Line Graph in Brutalist neon styling -->
+                <svg class="graph-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+                  <polyline points="0,80 15,30 25,60 40,20 55,75 70,40 85,90 100,25" stroke="var(--color-accent)" stroke-width="3" fill="none"/>
+                </svg>
+              </div>
+              <div class="metrics-stats">
+                <div class="stat-row">
+                  <span>CPU Load</span>
+                  <span class="stat-val">24.5%</span>
+                </div>
+                <div class="stat-row">
+                  <span>RAM Usage</span>
+                  <span class="stat-val">6.8 / 16 GB</span>
+                </div>
+                <div class="stat-row">
+                  <span>Network In</span>
+                  <span class="stat-val">45 MB/s</span>
+                </div>
+              </div>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+              <button class="btn-brutal" onclick="logConsole('Initializing system diagnostics...')">Run Diagnostics</button>
+              <button class="btn-brutal danger" onclick="logConsole('SHUTDOWN COMMAND SENT')">Force Terminate</button>
+            </div>
+          </div>
+
+          <!-- Command Terminal Console Card -->
+          <div class="console-panel">
+            <div class="console-header">
+              <span>TERMINAL CONSOLE</span>
+              <span style="color: var(--color-accent); font-family: var(--font-mono)">ONLINE</span>
+            </div>
+            <div class="console-body" id="console-output">
+              <div class="console-line input">&gt; sys_load_diagnostics</div>
+              <div class="console-line output">Loading modules... OK</div>
+              <div class="console-line output">Checking registry hooks... OK</div>
+              <div class="console-line output">Active keys: Ctrl+Space (Palette), Ctrl+Shift+Z (Quick Note)</div>
+              <div class="console-line input">&gt; status</div>
+              <div class="console-line output">Personal Command Center v1.0.0 is running stably.</div>
+            </div>
+            <div class="console-input-row">
+              <span class="console-prompt">&gt;</span>
+              <input type="text" class="console-field" placeholder="Type a command and press Enter... (e.g. /tasks, /help, clear)" id="console-input">
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUMN 2: TASKS -->
+        <div class="dashboard-col">
+          
+          <div class="brutalist-card" style="flex: 1;">
+            <div class="card-header">
+              <div class="card-title">Priority Tasks</div>
+              <span class="card-badge" style="background-color: var(--color-secondary); color: #FFFFFF">HIGH</span>
+            </div>
+            <div class="task-list">
+              <div class="task-item" id="task-1" onclick="toggleTask('task-1')">
+                <div class="task-checkbox"></div>
+                <span>Update main process autostart</span>
+              </div>
+              <div class="task-item done" id="task-2" onclick="toggleTask('task-2')">
+                <div class="task-checkbox"></div>
+                <span>Compile custom ICO wrapper</span>
+              </div>
+              <div class="task-item" id="task-3" onclick="toggleTask('task-3')">
+                <div class="task-checkbox"></div>
+                <span>Implement global keystroke traps</span>
+              </div>
+              <div class="task-item" id="task-4" onclick="toggleTask('task-4')">
+                <div class="task-checkbox"></div>
+                <span>Style frameless title controls</span>
+              </div>
+            </div>
+            <div style="margin-top: 16px;">
+              <input type="text" placeholder="Add task..." style="width: 100%; padding: 10px; background-color: #09090B; border: 2px solid var(--color-border); color: #FFFFFF; font-family: var(--font-mono); font-size: 11px; outline: none; margin-bottom: 8px;" id="new-task-input">
+              <button class="btn-brutal" style="width: 100%; padding: 8px;" onclick="addTask()">Add Task</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- 4. FLOATING STYLE CUSTOMIZER -->
+  <div class="style-customizer">
+    <div class="customizer-title">Style Customizer</div>
+    
+    <!-- Accent Color Selector -->
+    <div class="control-group">
+      <span class="control-label">Accent Highlight Color</span>
+      <div class="color-picker">
+        <div class="color-swatch" style="background-color: #ADFF2F" title="Neon Lime" onclick="setAccent('#ADFF2F')"></div>
+        <div class="color-swatch" style="background-color: #00E5FF" title="Electric Cyan" onclick="setAccent('#00E5FF')"></div>
+        <div class="color-swatch" style="background-color: #EAB308" title="Neon Amber" onclick="setAccent('#EAB308')"></div>
+        <div class="color-swatch" style="background-color: #FF45D8" title="Hot Pink" onclick="setAccent('#FF45D8')"></div>
+        <div class="color-swatch" style="background-color: #FF4A4A" title="Electric Red" onclick="setAccent('#FF4A4A')"></div>
+      </div>
+    </div>
+
+    <!-- Border Thickness Selector -->
+    <div class="control-group">
+      <span class="control-label">Border Width</span>
+      <div class="select-btn-group">
+        <button class="select-btn" id="b-1" onclick="setBorder(1)">1px</button>
+        <button class="select-btn" id="b-2" onclick="setBorder(2)">2px</button>
+        <button class="select-btn active" id="b-3" onclick="setBorder(3)">3px</button>
+        <button class="select-btn" id="b-4" onclick="setBorder(4)">4px</button>
+      </div>
+    </div>
+
+    <!-- Corner Roundness Selector -->
+    <div class="control-group">
+      <span class="control-label">Corner Roundness</span>
+      <div class="select-btn-group">
+        <button class="select-btn active" id="r-0" onclick="setRadius(0)">0px</button>
+        <button class="select-btn" id="r-4" onclick="setRadius(4)">4px</button>
+        <button class="select-btn" id="r-8" onclick="setRadius(8)">8px</button>
+        <button class="select-btn" id="r-12" onclick="setRadius(12)">12px</button>
+      </div>
+    </div>
+
+    <!-- Hard Shadow Offset Selector -->
+    <div class="control-group">
+      <span class="control-label">Shadow Offset</span>
+      <div class="select-btn-group">
+        <button class="select-btn" id="s-0" onclick="setShadow(0)">0px</button>
+        <button class="select-btn" id="s-2" onclick="setShadow(2)">2px</button>
+        <button class="select-btn active" id="s-4" onclick="setShadow(4)">4px</button>
+        <button class="select-btn" id="s-8" onclick="setShadow(8)">8px</button>
+      </div>
+    </div>
+
+    <div style="font-size: 10px; color: #71717A; font-family: var(--font-mono); margin-top: 8px; border-top: 1px dashed #3F3F46; padding-top: 8px; text-align: center;">
+      Interact with components to experience Neo-Brutalist physics.
+    </div>
+  </div>
+
+  <!-- INTERACTIVE PLAYGROUND SCRIPT -->
+  <script>
+    // Console functionality
+    const consoleInput = document.getElementById('console-input');
+    const consoleOutput = document.getElementById('console-output');
+
+    consoleInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const query = consoleInput.value.trim();
+        if (!query) return;
+
+        // Print input
+        const inLine = document.createElement('div');
+        inLine.className = 'console-line input';
+        inLine.innerText = '> ' + query;
+        consoleOutput.appendChild(inLine);
+
+        // Process Command
+        const cmd = query.toLowerCase();
+        let reply = '';
+        if (cmd === 'clear') {
+          consoleOutput.innerHTML = '';
+          consoleInput.value = '';
+          return;
+        } else if (cmd === 'status') {
+          reply = 'System: Online. Accents active. Branded elements mounted.';
+        } else if (cmd === '/tasks') {
+          reply = 'Tasks active: 3 remaining, 1 completed.';
+        } else if (cmd === 'help' || cmd === '/help') {
+          reply = 'Commands: clear, status, /tasks, help, reboot, theme';
+        } else if (cmd === 'reboot') {
+          reply = 'Rebooting virtual session... Terminal active.';
+        } else if (cmd.startsWith('theme ')) {
+          const color = cmd.split(' ')[1];
+          if (color) {
+            setAccent(color);
+            reply = 'Theme accent set to: ' + color;
+          }
+        } else {
+          reply = 'Command not recognized: "' + query + '". Type "help" for a list of available actions.';
+        }
+
+        const outLine = document.createElement('div');
+        outLine.className = 'console-line output';
+        outLine.innerText = reply;
+        consoleOutput.appendChild(outLine);
+
+        consoleInput.value = '';
+        consoleOutput.scrollTop = consoleOutput.scrollHeight;
+      }
+    });
+
+    function logConsole(message) {
+      const outLine = document.createElement('div');
+      outLine.className = 'console-line output';
+      outLine.innerText = '[EVENT] ' + message;
+      consoleOutput.appendChild(outLine);
+      consoleOutput.scrollTop = consoleOutput.scrollHeight;
+    }
+
+    // Toggle Task items
+    function toggleTask(id) {
+      const item = document.getElementById(id);
+      item.classList.toggle('done');
+      logConsole('Task status toggled for item: "' + item.querySelector('span').innerText + '"');
+    }
+
+    // Add new Task
+    function addTask() {
+      const input = document.getElementById('new-task-input');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const list = document.querySelector('.task-list');
+      const count = list.children.length + 1;
+      const itemId = 'task-' + count;
+
+      const div = document.createElement('div');
+      div.className = 'task-item';
+      div.id = itemId;
+      div.onclick = function() { toggleTask(itemId); };
+      div.innerHTML = '<div class="task-checkbox"></div><span>' + val + '</span>';
+      
+      list.appendChild(div);
+      input.value = '';
+      logConsole('Task added: "' + val + '"');
+    }
+
+    // Customizer controllers
+    function setAccent(color) {
+      document.documentElement.style.setProperty('--color-accent', color);
+      logConsole('Theme color updated to hex: ' + color);
+    }
+
+    function setBorder(width) {
+      document.documentElement.style.setProperty('--border-width', width + 'px');
+      document.querySelectorAll('.select-btn-group button[id^="b-"]').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('b-' + width).classList.add('active');
+      logConsole('Borders updated to: ' + width + 'px');
+    }
+
+    function setRadius(radius) {
+      document.documentElement.style.setProperty('--border-radius', radius + 'px');
+      document.querySelectorAll('.select-btn-group button[id^="r-"]').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('r-' + radius).classList.add('active');
+      logConsole('Corner radius set to: ' + radius + 'px');
+    }
+
+    function setShadow(offset) {
+      document.documentElement.style.setProperty('--shadow-offset', offset + 'px');
+      document.querySelectorAll('.select-btn-group button[id^="s-"]').forEach(btn => btn.classList.remove('active'));
+      document.getElementById('s-' + offset).classList.add('active');
+      logConsole('Hard shadows offset updated to: ' + offset + 'px');
+    }
+  </script>
+</body>
+</html>

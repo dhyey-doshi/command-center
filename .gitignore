@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+electron_stdout.log
+electron_stderr.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Environment and Scratch
+.env
+.env.local
+scratch/
+
+# Standalone Arduino / ESP32 project (kept in separate repo)
+OmniRover/
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo

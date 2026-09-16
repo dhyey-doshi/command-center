@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Command Center</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Custom Frameless Titlebar -->
+  <header class="titlebar">
+    <div class="titlebar-brand">
+      <div class="titlebar-status-dot" id="app-status-dot"></div>
+      <span>Command Center</span>
+    </div>
+    <div class="titlebar-controls">
+      <button class="titlebar-btn" id="window-minimize" data-icon="minimize" title="Minimize"></button>
+      <button class="titlebar-btn" id="window-maximize" data-icon="maximize" title="Maximize"></button>
+      <button class="titlebar-btn close" id="window-close" data-icon="close" title="Close to Tray"></button>
+    </div>
+  </header>
+
+  <!-- Physical Layout Frame -->
+  <div class="app-container">
+    
+    <!-- Left Navigation Rail -->
+    <nav class="sidebar" id="sidebar">
+      <div class="sidebar-nav">
+        <div class="sidebar-logo-item">
+          <span class="sidebar-logo-icon" data-icon="logo"></span>
+          <span class="sidebar-logo-text">Command Center</span>
+        </div>
+        <div class="nav-item active" data-target="home">
+          <span data-icon="home"></span>
+          <span class="nav-label">Home</span>
+        </div>
+        <div class="nav-item" data-target="library">
+          <span data-icon="library"></span>
+          <span class="nav-label">Library</span>
+        </div>
+        <div class="nav-item" data-target="tasks">
+          <span data-icon="tasks"></span>
+          <span class="nav-label">Tasks</span>
+        </div>
+        <div class="nav-item" data-target="notes">
+          <span data-icon="notes"></span>
+          <span class="nav-label">Notes</span>
+        </div>
+        <div class="nav-item" data-target="reminders">
+          <span data-icon="reminders"></span>
+          <span class="nav-label">Reminders</span>
+        </div>
+      </div>
+      <div class="sidebar-nav">
+        <div class="nav-item" data-target="settings">
+          <span data-icon="settings"></span>
+          <span class="nav-label">Settings</span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Workspace -->
+    <main class="main-content">
+      
+      <!-- View Deck -->
+      <section class="view-deck">
+
+        <!-- 1. HOME VIEW -->
+        <div class="view active" id="view-home">
+          <h1 class="view-title">Command Center</h1>
+          <div class="greeting-text" id="home-greeting">Good morning, D.</div>
+          
+          <div class="home-grid">
+            <div class="home-left">
+              <!-- Search box -->
+              <div class="home-search-container">
+                <span class="home-search-icon" data-icon="search"></span>
+                <input class="home-search-input" id="home-search-trigger" placeholder="Search resources, tasks, notes..." readonly>
+                <span class="home-search-shortcut">Ctrl Space</span>
+              </div>
+              
+              <!-- Quick Access -->
+              <div class="quick-access-section">
+                <div class="quick-access-header">
+                  <h2>Quick Access</h2>
+                  <div class="view-toggle">
+                    <button class="toggle-btn active" id="qa-comfortable" title="Comfortable View"><span data-icon="grid"></span></button>
+                    <button class="toggle-btn" id="qa-compact" title="Compact View"><span data-icon="list"></span></button>
+                  </div>
+                </div>
+                <div class="quick-access-content comfortable" id="home-quick-access">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+
+              <!-- Recently Opened -->
+              <div class="recent-section">
+                <h2>Recently Opened</h2>
+                <div class="quick-access-content compact" id="home-recent">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <div class="home-right">
+              <!-- Today's Tasks -->
+              <div class="today-tasks-section">
+                <h2>Today</h2>
+                <div class="home-item-list" id="home-tasks">
+                  <!-- Rendered dynamically -->
+                </div>
+                <span class="home-more-link" id="home-tasks-more" style="display:none;">+ 0 more</span>
+              </div>
+
+              <!-- Reminders -->
+              <div class="today-reminders-section">
+                <h2>Reminders</h2>
+                <div class="home-item-list" id="home-reminders">
+                  <!-- Rendered dynamically -->
+                </div>
+                <span class="home-more-link" id="home-reminders-more" style="display:none;">+ 0 more</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. RESOURCE LIBRARY VIEW -->
+        <div class="view" id="view-library">
+          <div class="library-header">
+            <h1>Resource Library</h1>
+            <div class="library-controls">
+              <input class="library-search" id="library-search-input" placeholder="Search library...">
+              <button class="btn-primary" id="btn-add-resource"><span data-icon="plus"></span> Add</button>
+            </div>
+          </div>
+
+          <div class="library-body">
+            <div class="library-nav" id="library-category-list">
+              <!-- Dynamically rendered categories -->
+            </div>
+            
+            <div class="library-main-panel">
+              <!-- Drag and drop landing pad -->
+              <div class="drop-zone" id="library-drop-zone">
+                + ADD TO LIBRARY<br>Drop your files or folders here
+              </div>
+              
+              <!-- Resources table list -->
+              <div style="overflow-x: auto; width: 100%;">
+                <table class="library-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 48px;"></th>
+                      <th style="width: 240px;">Name</th>
+                      <th>Location / Target</th>
+                      <th style="width: 80px; text-align: center;">Fav</th>
+                    </tr>
+                  </thead>
+                  <tbody id="library-items-list">
+                    <!-- Rendered dynamically -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TASKS VIEW -->
+        <div class="view" id="view-tasks">
+          <div class="task-header">
+            <h1>Tasks</h1>
+            <button class="btn-primary" id="btn-add-task-modal"><span data-icon="plus"></span> Add Task</button>
+          </div>
+
+          <div class="task-filter-row">
+            <button class="task-filter-btn active" data-filter="today">Today</button>
+            <button class="task-filter-btn" data-filter="upcoming">Upcoming</button>
+            <button class="task-filter-btn" data-filter="all">All</button>
+            <button class="task-filter-btn" data-filter="completed">Completed</button>
+          </div>
+
+          <!-- Undo Completed Task Toast -->
+          <div class="undo-banner" id="undo-banner" style="display: none;">
+            <span id="undo-banner-text">Task completed.</span>
+            <button id="btn-undo-task">Undo</button>
+          </div>
+
+          <!-- Inline creation input -->
+          <div class="task-input-container">
+            <input class="task-inline-input" id="task-inline-add" placeholder="○ What needs to be done? Press Enter to save.">
+          </div>
+
+          <div class="task-list" id="tasks-items-list">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- 4. NOTES VIEW -->
+        <div class="view" id="view-notes">
+          <div class="notes-container">
+            <!-- Left panel list -->
+            <div class="notes-list-panel">
+              <div class="library-header" style="margin-bottom: 0;">
+                <h1 style="font-size: 15px; margin-bottom: 0;">Notes</h1>
+                <button class="btn-primary" id="btn-new-note" style="height: 28px; padding: 0 10px; font-size: 11px;"><span data-icon="plus"></span> New</button>
+              </div>
+              <input class="notes-search" id="notes-search-input" placeholder="Search notes...">
+              <div class="notes-items" id="notes-items-list">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+
+            <!-- Right panel editor -->
+            <div class="notes-editor-panel" id="notes-editor-panel">
+              <div class="editor-header">
+                <input class="note-editor-title" id="note-edit-title" placeholder="Untitled Note" readonly>
+                <div class="editor-controls">
+                  <button class="btn-secondary" id="btn-toggle-edit-mode" style="height: 28px; padding: 0 10px; font-size: 11px;">Edit Mode</button>
+                  <button class="btn-secondary btn-exit-focus" id="btn-toggle-focus" style="height: 28px; padding: 0 10px; font-size: 11px;" title="Focus Mode (Ctrl+Shift+Enter)">Focus</button>
+                  <button class="btn-secondary" id="btn-delete-note" style="height: 28px; padding: 0 8px; border-color: var(--color-console-error); color: var(--color-console-error);" title="Delete note"><span data-icon="trash"></span></button>
+                </div>
+              </div>
+              
+              <!-- Live editor / preview areas -->
+              <textarea class="note-textarea" id="note-edit-content" placeholder="Start writing here..." style="display: none;"></textarea>
+              <div class="markdown-preview-container" id="note-preview-content" tabindex="0"></div>
+
+              <!-- Scratchpad Area -->
+              <div class="scratchpad-container" id="scratchpad-panel">
+                <h2>Scratchpad</h2>
+                <div class="task-input-container" style="margin-top: 12px; margin-bottom: 16px;">
+                  <input class="task-inline-input" id="scratchpad-inline-add" placeholder="Write a raw scratch thought... Press Enter.">
+                </div>
+                <div class="scratchpad-list" id="scratchpad-items-list">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. REMINDERS VIEW -->
+        <div class="view" id="view-reminders">
+          <div class="reminder-header">
+            <h1>Reminders</h1>
+            <button class="btn-primary" id="btn-add-reminder-modal"><span data-icon="plus"></span> Add Reminder</button>
+          </div>
+
+          <div class="reminders-timeline" id="reminders-timeline-list">
+            <!-- Dynamically populated categories -->
+          </div>
+        </div>
+
+        <!-- 6. SETTINGS VIEW -->
+        <div class="view" id="view-settings">
+          <h1>Settings</h1>
+          
+          <div class="settings-grid">
+            <!-- General -->
+            <div class="settings-section">
+              <div class="settings-section-title">General</div>
+              <div class="toggle-switch-container">
+                <div class="toggle-switch-label">
+                  <div class="toggle-switch-title">Run on startup</div>
+                  <div class="toggle-switch-desc">Launch Command Center automatically when logging in.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-startup">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-switch-container">
+                <div class="toggle-switch-label">
+                  <div class="toggle-switch-title">Start minimized</div>
+                  <div class="toggle-switch-desc">Start quietly in the system tray.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-start-min">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="toggle-switch-container">
+                <div class="toggle-switch-label">
+                  <div class="toggle-switch-title">Close to tray</div>
+                  <div class="toggle-switch-desc">Closing the application window will minimize it to the tray rather than quitting.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-close-tray">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Appearance / Customization -->
+            <div class="settings-section">
+              <div class="settings-section-title">Appearance & Greeting</div>
+              <div class="form-group">
+                <label class="form-label" for="setting-greeting">Personalized Greeting</label>
+                <input class="form-input" id="setting-greeting" placeholder="So D, what's on your mind today?">
+              </div>
+            </div>
+
+            <!-- Quiet Hours -->
+            <div class="settings-section">
+              <div class="settings-section-title">Quiet Hours</div>
+              <div class="toggle-switch-container" style="border-bottom: none;">
+                <div class="toggle-switch-label">
+                  <div class="toggle-switch-title">Enable Quiet Hours</div>
+                  <div class="toggle-switch-desc">Silence non-urgent notifications during specific hours.</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="setting-quiet-enabled">
+                  <span class="slider"></span>
+                </label>
+              </div>
+              <div class="form-row" id="quiet-hours-range" style="display: none;">
+                <div class="form-group">
+                  <label class="form-label" for="setting-quiet-start">Start Time</label>
+                  <input class="form-input" type="time" id="setting-quiet-start" value="23:00">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="setting-quiet-end">End Time</label>
+                  <input class="form-input" type="time" id="setting-quiet-end" value="07:00">
+                </div>
+              </div>
+            </div>
+
+            <!-- Storage & Backups -->
+            <div class="settings-section">
+              <div class="settings-section-title">Local Data Management</div>
+              <div class="form-group">
+                <label class="form-label">Database File Path</label>
+                <input class="form-input" id="setting-db-path" style="font-family: var(--font-mono); font-size: 11px;" readonly>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Backups Folder Path</label>
+                <input class="form-input" id="setting-backups-path" style="font-family: var(--font-mono); font-size: 11px;" readonly>
+              </div>
+              <div class="form-actions" style="margin-top: 8px; justify-content: flex-start;">
+                <button class="btn-secondary" id="btn-open-db-dir">Open Data Folder</button>
+                <button class="btn-secondary" id="btn-trigger-backup">Force Backup</button>
+                <button class="btn-secondary" id="btn-restore-panel-trigger">Restore Backups</button>
+              </div>
+              <div id="restore-backups-list" style="display: none; margin-top: 16px;">
+                <h2>Select a Backup to Restore</h2>
+                <div class="home-item-list" id="backups-items-container" style="margin-top: 8px;">
+                  <!-- Rendered dynamically -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Shortcuts -->
+            <div class="settings-section">
+              <div class="settings-section-title">Global Keyboard Shortcuts</div>
+              <p style="font-size: 12px; color: var(--color-text-secondary); margin-bottom: 8px;">
+                Changes here register globally on your system. Catching overrides standard keyboard commands.
+              </p>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="shortcut-palette">Command Palette</label>
+                  <input class="form-input" id="shortcut-palette" value="Ctrl+Space" readonly>
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="shortcut-note">Quick Note Capture</label>
+                  <input class="form-input" id="shortcut-note" value="Ctrl+Shift+Z" readonly>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="shortcut-console">Toggle Console</label>
+                  <input class="form-input" id="shortcut-console" value="Shift+`" readonly>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Bottom Console Launcher -->
+      <footer class="bottom-console-launcher" id="console-launcher">
+        <span class="bottom-console-text">> open console ;)</span>
+        <span class="bottom-console-shortcut">Shift + `</span>
+      </footer>
+
+      <!-- Slider Drawer Console -->
+      <div class="console-panel" id="console-panel">
+        <div class="console-header">
+          <span class="console-title">Personalized Console</span>
+          <button class="console-close" id="console-clear-btn" style="margin-right: 12px; border: none; background: none; cursor: pointer;">Clear</button>
+          <button class="console-close" id="console-close-btn">Close</button>
+        </div>
+        <div class="console-output" id="console-output">
+          <!-- Dynamically filled logs -->
+        </div>
+        <div class="console-input-row">
+          <span class="console-prompt">&gt;</span>
+          <input class="console-input" id="console-input" placeholder="Type a command or search anything... Use Tab to autocomplete." autocomplete="off" spellcheck="false">
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- Detail Side Drawer Overlay -->
+  <div class="detail-panel-backdrop" id="detail-backdrop"></div>
+  <div class="detail-panel" id="detail-panel">
+    <!-- Rendered dynamically -->
+  </div>
+
+  <!-- Command Palette Modal Backdrop -->
+  <div class="modal-backdrop" id="palette-backdrop">
+    <div class="modal palette-modal">
+      <div class="palette-input-container">
+        <span class="palette-search-icon" data-icon="search"></span>
+        <input class="palette-input" id="palette-input" placeholder="Search resources, tasks, notes..." autocomplete="off">
+        <span class="bottom-console-shortcut" style="font-size: 10px;">ESC</span>
+      </div>
+      <div class="palette-results" id="palette-results">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Note Capture Dialog Backdrop -->
+  <div class="modal-backdrop" id="quick-note-backdrop">
+    <div class="modal" style="max-width: 460px;">
+      <div class="modal-header">
+        <span class="modal-title">Quick Note</span>
+        <button class="modal-close" id="quick-note-close" data-icon="close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <textarea class="form-textarea" id="quick-note-text" placeholder="Recursion idea: use a stack to..." style="min-height: 120px; font-size: 14px; line-height: 1.5;"></textarea>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--color-text-muted);">
+          <span>Auto-saves to Notes</span>
+          <span>Ctrl + Enter to Save</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Resource Modal -->
+  <div class="modal-backdrop" id="resource-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="resource-modal-title">Add Resource</span>
+        <button class="modal-close" id="resource-modal-close" data-icon="close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="resource-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="res-name">Name *</label>
+            <input class="form-input" id="res-name" required placeholder="e.g. Notion Workspace">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="res-type">Type *</label>
+            <select class="form-select" id="res-type">
+              <option value="link">Website / Link</option>
+              <option value="file">File</option>
+              <option value="folder">Folder</option>
+              <option value="pdf">PDF File</option>
+              <option value="notion">Notion Page</option>
+              <option value="obsidian">Obsidian Vault</option>
+              <option value="application">Application</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="res-target">Target URL / File Path *</label>
+            <input class="form-input" id="res-target" required placeholder="e.g. https://github.com, ~/Documents, C:\Projects">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="res-category">Category</label>
+            <select class="form-select" id="res-category">
+              <option value="">None</option>
+              <option value="college">College</option>
+              <option value="development">Development</option>
+              <option value="personal">Personal</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="res-tags">Tags (comma separated)</label>
+            <input class="form-input" id="res-tags" placeholder="e.g. docs, study, workspace">
+          </div>
+          <div class="form-actions">
+            <button class="btn-secondary" type="button" id="btn-resource-cancel">Cancel</button>
+            <button class="btn-primary" type="submit" id="btn-resource-submit">Add</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Task Modal -->
+  <div class="modal-backdrop" id="task-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="task-modal-title">Create Task</span>
+        <button class="modal-close" id="task-modal-close" data-icon="close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="task-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="task-title-input">Task Title *</label>
+            <input class="form-input" id="task-title-input" required placeholder="What needs to be done?">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-desc">Description</label>
+            <textarea class="form-textarea" id="task-desc" placeholder="Details..."></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="task-priority">Priority</label>
+              <select class="form-select" id="task-priority">
+                <option value="low">Low</option>
+                <option value="normal" selected>Normal</option>
+                <option value="high">High</option>
+                <option value="urgent">Urgent</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="task-due">Due Date & Time</label>
+              <input class="form-input" type="datetime-local" id="task-due">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="task-project">Project</label>
+              <input class="form-input" id="task-project" placeholder="e.g. NASA, DBMS">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="task-remind">Create Reminder Too?</label>
+              <select class="form-select" id="task-remind">
+                <option value="no" selected>No</option>
+                <option value="due">Yes, at Due Time</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn-secondary" type="button" id="btn-task-cancel">Cancel</button>
+            <button class="btn-primary" type="submit" id="btn-task-submit">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Reminder Modal -->
+  <div class="modal-backdrop" id="reminder-modal-backdrop">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="modal-title" id="reminder-modal-title">Create Reminder</span>
+        <button class="modal-close" id="reminder-modal-close" data-icon="close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="reminder-form" onsubmit="event.preventDefault();">
+          <div class="form-group">
+            <label class="form-label" for="rem-msg">Reminder Message *</label>
+            <input class="form-input" id="rem-msg" required placeholder="e.g. Submit DBMS Assignment">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rem-type">Trigger Type *</label>
+            <select class="form-select" id="rem-type">
+              <option value="time">Specific Time</option>
+              <option value="startup-next">Next Startup (One-Shot)</option>
+              <option value="startup-every">Every Startup (Recurring)</option>
+            </select>
+          </div>
+          <div class="form-group" id="rem-time-group">
+            <label class="form-label" for="rem-time">Trigger Date & Time *</label>
+            <input class="form-input" type="datetime-local" id="rem-time">
+          </div>
+          <div class="form-actions">
+            <button class="btn-secondary" type="button" id="btn-reminder-cancel">Cancel</button>
+            <button class="btn-primary" type="submit" id="btn-reminder-submit">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application scripts -->
+  <script src="icons.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

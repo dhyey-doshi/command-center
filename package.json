@@ -1,0 +1,30 @@
+{
+  "name": "command-center",
+  "version": "1.0.0",
+  "description": "Local-first personal command center built with Electron and a raw Neo-Brutalist design language.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test:launch": "node launch_test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dhyey-doshi/command-center.git"
+  },
+  "keywords": [
+    "electron",
+    "command-center",
+    "productivity",
+    "neo-brutalism",
+    "local-first",
+    "task-management",
+    "notes",
+    "reminders",
+    "launcher"
+  ],
+  "author": "Dhyey Doshi <dhyeydev178@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.3.1"
+  }
+}
